@@ -33,6 +33,8 @@ public class CustomTerrainEditor : Editor
         // this is what we see when the arrow is down
         if(showRandom)
         {
+
+            // Random terrain button
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUILayout.Label("Set Heights Between Random Values", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(randomHeightRange);
@@ -40,11 +42,14 @@ public class CustomTerrainEditor : Editor
             {
                 terrain.RandomTerrain();
             }
-            GUILayout.Label("Reset Heights", EditorStyles.boldLabel);
-            if (GUILayout.Button("Reset Heights"))
-            {
-                terrain.ResetTerrain();
-            }
+        }
+
+        // Reset button
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Reset Heights", EditorStyles.boldLabel);
+        if (GUILayout.Button("Reset Heights"))
+        {
+            terrain.ResetTerrain();
         }
 
 

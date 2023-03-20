@@ -14,26 +14,24 @@ public class CustomTerrain : MonoBehaviour
     public TerrainData terrainData;
     public void RandomTerrain()
     {
-        // create somewhere to store the point data
+        // get current hieght map data onto a new hieghtmap
         float[,] heightMap = terrainData.GetHeights(0, 0, terrainData.heightmapWidth, 
                                                                     terrainData.heightmapHeight);
 
-        // get the size of the terrain to size our height map
-        heightMap = new float[terrainData.heightmapWidth, terrainData.heightmapHeight];
-        
         //loop along the x and y
         for (int x = 0; x < terrainData.heightmapWidth; x++)
         {
             for (int y = 0; y < terrainData.heightmapHeight; y++)
             {
-                // set each point to a random height between our range
+                // set each point to a random height between our range --> the range is the height of the map(maybe 600)
                 heightMap[x, y] += UnityEngine.Random.Range(randomHeightRange.x, randomHeightRange.y);
             }
         }
         // set the terrain to our heightmaps randomly generated points
-        // we can limit the affected region using the x,y values here,
-        // but we dont want to since we want to affect the whole terrain
+
         terrainData.SetHeights(0,0, heightMap);
+            // we can limit the affected region using the x,y values here,
+        // but we dont want to since we want to affect the whole terrain
     }
 
     public void ResetTerrain()
