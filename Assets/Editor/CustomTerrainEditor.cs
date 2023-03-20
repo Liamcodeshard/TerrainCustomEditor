@@ -40,6 +40,11 @@ public class CustomTerrainEditor : Editor
             {
                 terrain.RandomTerrain();
             }
+            GUILayout.Label("Reset Heights", EditorStyles.boldLabel);
+            if (GUILayout.Button("Reset Heights"))
+            {
+                terrain.ResetTerrain();
+            }
         }
 
 
