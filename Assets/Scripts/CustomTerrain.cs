@@ -52,8 +52,9 @@ public class CustomTerrain : MonoBehaviour
             {
                 // set each point on the map to the corresponding pixel on the image
                 heightMap[x, z] =
-                    heightMapImage.GetPixel((int)(x * heightMapScale.x), (int)(z * heightMapScale.z)).grayscale *
-                    heightMapScale.y;
+                    heightMapImage.GetPixel((int)(x * heightMapScale.x),
+                                            (int)(z * heightMapScale.z)).grayscale 
+                                                * heightMapScale.y;
             }
         }
         terrainData.SetHeights(0, 0, heightMap);
