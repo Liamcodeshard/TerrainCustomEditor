@@ -9,7 +9,14 @@ using UnityEditor;
 
 public class CustomTerrain : MonoBehaviour
 {
+    // empty vector for the random height map
     public Vector2 randomHeightRange = new Vector2(0,0.1f);
+    
+    // here we will be taking a 2D image and turning it into a height map - we need to be able to scale the pic
+    public Texture2D heightMapImage;
+    public Vector3 heightMapScale = new Vector3(1, 1, 1);
+
+
     public Terrain terrain;
     public TerrainData terrainData;
     public void RandomTerrain()
@@ -32,6 +39,24 @@ public class CustomTerrain : MonoBehaviour
         terrainData.SetHeights(0,0, heightMap);
             // we can limit the affected region using the x,y values here,
         // but we dont want to since we want to affect the whole terrain
+    }
+
+    public void LoadTexture()
+    {
+        float[,] heightMap;
+        heightMap = new float[terrainData.heightmapWidth, terrainData.heightmapHeight]; 
+        
+        for (int x = 0; x < terrainData.heightmapWidth; x++)
+        {
+            for (int z = 0; z < terrainData.heightmapHeight; z++)
+            {
+                // set each point on the map to the corresponding pixel on the image
+                heightMap[x, z] =
+                    heightMapImage.GetPixel((int)(x * heightMapScale.x), (int)(z * heightMapScale.z)).grayscale *
+                    heightMapScale.y;
+            }
+        }
+        terrainData.SetHeights(0, 0, heightMap);
     }
 
     public void ResetTerrain()

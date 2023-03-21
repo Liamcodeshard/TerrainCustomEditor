@@ -8,15 +8,23 @@ using EditorGUITable;
 
 public class CustomTerrainEditor : Editor
 {
+
+    // properties -----------
     SerializedProperty randomHeightRange;
+    SerializedProperty heightMapScale;
+    SerializedProperty heightMapImage;
+
 
     // allows this secttion ot be dropped down
     bool showRandom = false;
+    private bool showLoadHeights = false;
 
     void OnEnable()
     {
         //matches the property with the one on the terrain
         randomHeightRange = serializedObject.FindProperty("randomHeightRange");
+        heightMapScale = serializedObject.FindProperty("heightMapScale");
+        heightMapImage = serializedObject.FindProperty("heightMapImage");
     }
 
     public override void OnInspectorGUI()
@@ -31,23 +39,37 @@ public class CustomTerrainEditor : Editor
         showRandom = EditorGUILayout.Foldout(showRandom, "Random");
 
         // this is what we see when the arrow is down
-        if(showRandom)
+        if (showRandom)
         {
 
             // Random terrain button
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUILayout.Label("Set Heights Between Random Values", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(randomHeightRange);
-            if(GUILayout.Button("Random Heights"))
+            if (GUILayout.Button("Random Heights"))
             {
                 terrain.RandomTerrain();
             }
         }
 
+        showLoadHeights = EditorGUILayout.Foldout(showLoadHeights, "Load Heights");
+        // this is what we see when the arrow is down
+        if (showLoadHeights)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Load Heights From Texture", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(heightMapImage);
+            EditorGUILayout.PropertyField(heightMapScale);
+            if (GUILayout.Button("Load Texture"))
+            {
+                terrain.LoadTexture();
+            }
+        }
+
         // Reset button
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("Reset Heights", EditorStyles.boldLabel);
-        if (GUILayout.Button("Reset Heights"))
+        GUILayout.Label("Reset Terrain", EditorStyles.boldLabel);
+        if (GUILayout.Button("Reset Terrain"))
         {
             terrain.ResetTerrain();
         }
