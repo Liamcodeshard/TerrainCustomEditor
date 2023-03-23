@@ -13,11 +13,15 @@ public class CustomTerrainEditor : Editor
     SerializedProperty randomHeightRange;
     SerializedProperty heightMapScale;
     SerializedProperty heightMapImage;
-
+    SerializedProperty perlinXScale;
+    SerializedProperty perlinYScale;
+    SerializedProperty perlinXOffset;
+    SerializedProperty perlinYOffset;
 
     // allows this secttion ot be dropped down
     bool showRandom = false;
     private bool showLoadHeights = false;
+    private bool showPerlinNoise = false;
 
     void OnEnable()
     {
@@ -25,6 +29,10 @@ public class CustomTerrainEditor : Editor
         randomHeightRange = serializedObject.FindProperty("randomHeightRange");
         heightMapScale = serializedObject.FindProperty("heightMapScale");
         heightMapImage = serializedObject.FindProperty("heightMapImage");
+        perlinXScale = serializedObject.FindProperty("perlinXScale");
+        perlinYScale = serializedObject.FindProperty("perlinYScale");
+        perlinXOffset = serializedObject.FindProperty("perlinXOffset");
+        perlinYOffset = serializedObject.FindProperty("perlinYOffset");
     }
 
     public override void OnInspectorGUI()
@@ -49,6 +57,29 @@ public class CustomTerrainEditor : Editor
             if (GUILayout.Button("Random Heights"))
             {
                 terrain.RandomTerrain();
+            }
+        }    
+        
+
+
+        // this is the logic purely behind the arrow
+        showPerlinNoise = EditorGUILayout.Foldout(showPerlinNoise, "Perlin Noise");
+        // this is what we see when the arrow is down
+        if (showPerlinNoise)
+        {
+
+            // Generate noise button
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Generate Perlin Noise to Set Heights", EditorStyles.boldLabel);
+            EditorGUILayout.Slider(perlinXScale, 0, 1, new GUIContent("X Scale"));
+            EditorGUILayout.Slider(perlinYScale, 0, 1, new GUIContent("Y Scale"));
+            EditorGUILayout.PropertyField(perlinXOffset);
+            EditorGUILayout.PropertyField(perlinYOffset);
+
+
+            if (GUILayout.Button("Generate Noise"))
+            {
+                terrain.Perlin();
             }
         }
 
