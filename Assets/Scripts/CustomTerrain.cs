@@ -22,13 +22,13 @@ public class CustomTerrain : MonoBehaviour
     public void RandomTerrain()
     {
         // get current hieght map data onto a new hieghtmap
-        float[,] heightMap = terrainData.GetHeights(0, 0, terrainData.heightmapWidth, 
-                                                                    terrainData.heightmapHeight);
+        float[,] heightMap = terrainData.GetHeights(0, 0, terrainData.heightmapResolution, 
+                                                                    terrainData.heightmapResolution);
 
         //loop along the x and y
-        for (int x = 0; x < terrainData.heightmapWidth; x++)
+        for (int x = 0; x < terrainData.heightmapResolution; x++)
         {
-            for (int y = 0; y < terrainData.heightmapHeight; y++)
+            for (int y = 0; y < terrainData.heightmapResolution; y++)
             {
                 // set each point to a random height between our range --> the range is the height of the map(maybe 600)
                 heightMap[x, y] += UnityEngine.Random.Range(randomHeightRange.x, randomHeightRange.y);
@@ -44,11 +44,11 @@ public class CustomTerrain : MonoBehaviour
     public void LoadTexture()
     {
         float[,] heightMap;
-        heightMap = new float[terrainData.heightmapWidth, terrainData.heightmapHeight]; 
+        heightMap = new float[terrainData.heightmapResolution, terrainData.heightmapResolution]; 
         
-        for (int x = 0; x < terrainData.heightmapWidth; x++)
+        for (int x = 0; x < terrainData.heightmapResolution; x++)
         {
-            for (int z = 0; z < terrainData.heightmapHeight; z++)
+            for (int z = 0; z < terrainData.heightmapResolution; z++)
             {
                 // set each point on the map to the corresponding pixel on the image
                 heightMap[x, z] =
@@ -62,7 +62,7 @@ public class CustomTerrain : MonoBehaviour
 
     public void ResetTerrain()
     {
-        float[,] resetMap = new float[terrainData.heightmapWidth, terrainData.heightmapHeight];
+        float[,] resetMap = new float[terrainData.heightmapResolution, terrainData.heightmapResolution];
        terrainData.SetHeights(0, 0,resetMap);
 
     }
