@@ -17,11 +17,19 @@ public class CustomTerrainEditor : Editor
     SerializedProperty perlinYScale;
     SerializedProperty perlinXOffset;
     SerializedProperty perlinYOffset;
+    SerializedProperty perlinOctaves;
+    SerializedProperty perlinPersistance;
+    SerializedProperty perlinHeightScale;
+    SerializedProperty resetTerrain;
+
+    GUITableState perlinParameterTable;
+    SerializedProperty perlinParameters;
 
     // allows this secttion ot be dropped down
     bool showRandom = false;
     private bool showLoadHeights = false;
     private bool showPerlinNoise = false;
+    private bool showMultiplePerlinNoise = false;
 
     void OnEnable()
     {
@@ -33,6 +41,12 @@ public class CustomTerrainEditor : Editor
         perlinYScale = serializedObject.FindProperty("perlinYScale");
         perlinXOffset = serializedObject.FindProperty("perlinXOffset");
         perlinYOffset = serializedObject.FindProperty("perlinYOffset");
+        perlinOctaves = serializedObject.FindProperty("perlinOctaves");
+        perlinPersistance = serializedObject.FindProperty("perlinPersistance");
+        perlinHeightScale = serializedObject.FindProperty("perlinHeightScale");
+        resetTerrain = serializedObject.FindProperty("resetTerrain");
+        perlinParameterTable = new GUITableState("perlinParameterTable");
+        perlinParameters = serializedObject.FindProperty("perlinParameters");
     }
 
     public override void OnInspectorGUI()
@@ -42,6 +56,8 @@ public class CustomTerrainEditor : Editor
 
         // editor scripts recognise the target as the type (above)
         CustomTerrain terrain = (CustomTerrain)target;
+
+        EditorGUILayout.PropertyField(resetTerrain);
 
         // this is the logic purely behind the arrow
         showRandom = EditorGUILayout.Foldout(showRandom, "Random");
@@ -73,8 +89,12 @@ public class CustomTerrainEditor : Editor
             GUILayout.Label("Generate Perlin Noise to Set Heights", EditorStyles.boldLabel);
             EditorGUILayout.Slider(perlinXScale, 0, 1, new GUIContent("X Scale"));
             EditorGUILayout.Slider(perlinYScale, 0, 1, new GUIContent("Y Scale"));
-            EditorGUILayout.PropertyField(perlinXOffset);
-            EditorGUILayout.PropertyField(perlinYOffset);
+            EditorGUILayout.IntSlider(perlinXOffset,0,10000, new GUIContent("Offset X"));
+            EditorGUILayout.IntSlider(perlinYOffset,0,10000, new GUIContent("Offset Y"));
+            EditorGUILayout.IntSlider(perlinOctaves,0,10, new GUIContent("Octaves"));
+            EditorGUILayout.Slider(perlinPersistance, 0, 10, new GUIContent("Persistence"));
+            EditorGUILayout.Slider(perlinHeightScale, 0, 1, new GUIContent("Height Scale"));
+
 
 
             if (GUILayout.Button("Generate Noise"))
@@ -82,6 +102,34 @@ public class CustomTerrainEditor : Editor
                 terrain.Perlin();
             }
         }
+
+
+        showMultiplePerlinNoise = EditorGUILayout.Foldout(showMultiplePerlinNoise, "Multiple Perlin Noise Waves");
+        if (showMultiplePerlinNoise)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Multiple Perlin Noise Waves", EditorStyles.boldLabel);
+
+            perlinParameterTable = GUITableLayout.DrawTable(perlinParameterTable, perlinParameters);
+
+            GUILayout.Space(20);
+            EditorGUILayout.BeginHorizontal();
+            if(GUILayout.Button("+"))
+            {
+                terrain.AddNewPerlin();
+            }           
+            if(GUILayout.Button("-"))
+            {
+                terrain.RemovePerlin();
+            }
+            EditorGUILayout.EndHorizontal();
+            if(GUILayout.Button("Apply Multiple Perlin"))
+            {
+                terrain.MultiplePerlinTerrain();
+            }
+        }
+
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         showLoadHeights = EditorGUILayout.Foldout(showLoadHeights, "Load Heights");
         // this is what we see when the arrow is down
