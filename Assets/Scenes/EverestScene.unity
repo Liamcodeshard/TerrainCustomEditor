@@ -199,7 +199,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 9.1835e-41, y: 2.0387484e-38, z: 4.5697343e-37, w: 4.1326e-40}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -248,7 +248,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.9622642, g: 0.55042756, b: 0.34950158, a: 1}
-  m_Intensity: 1.12
+  m_Intensity: 3
   m_Range: 1037.3
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -290,10 +290,10 @@ Light:
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 9.94
+  m_BounceIntensity: 2
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 3.4e-44, z: 0, w: NaN}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -306,7 +306,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 367418195}
   m_LocalRotation: {x: 0.6003715, y: 0.1959291, z: 0.17711894, w: 0.7548476}
-  m_LocalPosition: {x: -254, y: 846, z: 152}
+  m_LocalPosition: {x: -460, y: 846, z: 18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -342,7 +342,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.9622642, g: 0.55042756, b: 0.34950158, a: 1}
-  m_Intensity: 1.12
+  m_Intensity: 3
   m_Range: 1037.3
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -384,10 +384,10 @@ Light:
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 9.94
+  m_BounceIntensity: 2
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 3.4e-44, z: 0, w: -1.2094756e-36}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -400,7 +400,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 448534009}
   m_LocalRotation: {x: 0.84359795, y: 0.05936271, z: -0.09537017, w: 0.5250935}
-  m_LocalPosition: {x: 255, y: 876, z: 710}
+  m_LocalPosition: {x: 347, y: 876, z: 727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -483,14 +483,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.030564344, y: -0.011671199, z: 0.006836057, w: 0.9994413}
-  m_LocalPosition: {x: 309.4, y: 166.7, z: 27.9}
+  m_LocalRotation: {x: -0.030576874, y: -0.18373136, z: 0.014853121, w: 0.98238856}
+  m_LocalPosition: {x: 289, y: 154.7, z: 66.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 3.512, y: -1.315, z: 0.743}
+  m_LocalEulerAnglesHint: {x: -3.131, y: -21.25, z: 2.32}
 --- !u!1 &2044513294
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,20 +587,28 @@ MonoBehaviour:
   heightMapImage: {fileID: 2800000, guid: cde8a9068f274e247bd3ccd6a5ceb8da, type: 3}
   heightMapScale: {x: 2, y: 0.5, z: 2}
   perlinXScale: 0.01
-  perlinYScale: 0.01
+  perlinYScale: 0.013
   perlinXOffset: 125
   perlinYOffset: 105
-  perlinOctaves: 3
-  perlinPersistance: 8
-  perlinHeightScale: 0.09
+  perlinOctaves: 1
+  perlinPersistance: 1.31
+  perlinHeightScale: 0.15
   perlinParameters:
   - mPerlinXScale: 0.01
     mPerlinYScale: 0.01
+    mPerlinXOffset: 35
+    mPerlinYOffset: 10
+    mPerlinOctaves: 3
+    mPerlinPersistance: 8
+    mPerlinHeightScale: 0.01
+    remove: 0
+  - mPerlinXScale: 0.001
+    mPerlinYScale: 0.001
     mPerlinXOffset: 100
     mPerlinYOffset: 100
     mPerlinOctaves: 3
     mPerlinPersistance: 8
-    mPerlinHeightScale: 0.09
+    mPerlinHeightScale: 0.3
     remove: 0
   terrain: {fileID: 2044513296}
   terrainData: {fileID: 15600000, guid: 7c47248ec7c33394d8b9cc1eb970dc6b, type: 2}
@@ -633,7 +641,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.9622642, g: 0.55042756, b: 0.34950158, a: 1}
-  m_Intensity: 1.12
+  m_Intensity: 3
   m_Range: 1037.3
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -675,10 +683,10 @@ Light:
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 9.94
+  m_BounceIntensity: 2
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 4.5156496e+27, y: 0, z: 0, w: NaN}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -691,7 +699,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2085507703}
   m_LocalRotation: {x: 0.6039935, y: 0.017469887, z: -0.06215332, w: 0.79437}
-  m_LocalPosition: {x: 333.1, y: 973, z: -124}
+  m_LocalPosition: {x: 557.5, y: 973, z: -124}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
