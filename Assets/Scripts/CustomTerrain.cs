@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity;
 using UnityEditor;
 
 
@@ -19,7 +20,8 @@ public class CustomTerrain : MonoBehaviour
     public Texture2D heightMapImage;
     public Vector3 heightMapScale = new Vector3(1, 1, 1);
 
-    //perlin single wave
+    //perlin single wave ------------------------------------
+
     public float perlinXScale = 0.01f;
     public float perlinYScale = 0.01f;
     public int perlinXOffset = 100;
@@ -29,7 +31,7 @@ public class CustomTerrain : MonoBehaviour
     public float perlinHeightScale = 0.09f;
 
 
-    //Multiple perlin waves
+    //Multiple perlin waves -------------------
 
     //first we set up a class that contains the same parameters as our perlin noise
     [System.Serializable]
@@ -54,9 +56,10 @@ public class CustomTerrain : MonoBehaviour
 
 
 
-    // data containers for this terrain
+    // data containers for this terrain ---------------
     public Terrain terrain;
     public TerrainData terrainData;
+
 
 
     float[,] GetHeightMap()
@@ -71,6 +74,20 @@ public class CustomTerrain : MonoBehaviour
         {
             return new float[terrainData.heightmapResolution, terrainData.heightmapResolution];
         }
+    }
+
+
+    public void VoronoiTessalation()
+    {
+        float[,] voronoiHeightMap = GetHeightMap();
+
+        int randomPointX = UnityEngine.Random.Range(0, terrainData.heightmapResolution);
+        int randomPointY = UnityEngine.Random.Range(0, terrainData.heightmapResolution);
+        float randomHeight = UnityEngine.Random.Range(0f, 1f);
+
+        voronoiHeightMap[randomPointX, randomPointY] = randomHeight;
+        
+        terrainData.SetHeights(0, 0, voronoiHeightMap);
     }
 
     public void Perlin()

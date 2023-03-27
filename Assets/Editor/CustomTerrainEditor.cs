@@ -30,6 +30,7 @@ public class CustomTerrainEditor : Editor
     private bool showLoadHeights = false;
     private bool showPerlinNoise = false;
     private bool showMultiplePerlinNoise = false;
+    private bool showVoronoi = false;
 
     void OnEnable()
     {
@@ -74,8 +75,26 @@ public class CustomTerrainEditor : Editor
             {
                 terrain.RandomTerrain();
             }
+        }   
+
+
+        // this is the logic purely behind the arrow
+        showVoronoi = EditorGUILayout.Foldout(showVoronoi, "Voronoi");
+
+        // this is what we see when the arrow is down
+        if (showVoronoi)
+        {
+
+            // Random terrain button
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Voronoi", EditorStyles.boldLabel);
+            if (GUILayout.Button("Voronoi"))
+            {
+                terrain.VoronoiTessalation();
+            }
         }    
         
+
 
 
         // this is the logic purely behind the arrow
