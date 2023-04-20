@@ -56,6 +56,16 @@ public class CustomTerrain : MonoBehaviour
 
 
 
+    // veronoi ----------------
+
+    public int peakCount = 3;
+    public float fallOffValue = 0.2f;
+    public float dropOffValue = 0.6f;
+    public float minHeight = 0;
+    public float maxHeight = 1;
+
+
+
     // data containers for this terrain ---------------
     public Terrain terrain;
     public TerrainData terrainData;
@@ -66,12 +76,14 @@ public class CustomTerrain : MonoBehaviour
     {
         if (!resetTerrain)
         {
+            // gets data from the current terrain
             return terrainData.GetHeights(0, 0,
                 terrainData.heightmapResolution,
                 terrainData.heightmapResolution);
         }
         else
         {
+            //gives a fresh float value
             return new float[terrainData.heightmapResolution, terrainData.heightmapResolution];
         }
     }
@@ -81,12 +93,50 @@ public class CustomTerrain : MonoBehaviour
     {
         float[,] voronoiHeightMap = GetHeightMap();
 
-        int randomPointX = UnityEngine.Random.Range(0, terrainData.heightmapResolution);
-        int randomPointY = UnityEngine.Random.Range(0, terrainData.heightmapResolution);
-        float randomHeight = UnityEngine.Random.Range(0f, 1f);
+        // find the furthest possible distance on the heightmap (top right and bottomleft i.e)
+        float maxDistance = Vector2.Distance(Vector2.zero, new Vector2(terrainData.heightmapResolution,
+                                                                        terrainData.heightmapResolution));
 
-        voronoiHeightMap[randomPointX, randomPointY] = randomHeight;
-        
+
+        for (int i = 0; i < peakCount; i++)
+        {
+            // is the int going to cause an issue?**
+            int randomPointX = UnityEngine.Random.Range(0, terrainData.heightmapResolution);
+            int randomPointY = UnityEngine.Random.Range(0, terrainData.heightmapResolution);
+            float randomHeight = UnityEngine.Random.Range(minHeight, maxHeight);
+
+
+            // take the random point and height and load it into the heightmap
+            if (voronoiHeightMap[randomPointX, randomPointY] < randomHeight)
+            {
+                voronoiHeightMap[randomPointX, randomPointY] = randomHeight;
+            }
+            else continue;
+            // call it something and store it to compare later
+            Vector2 peakLocation = new Vector2(randomPointX, randomPointY);
+
+            // loop through terrain and value each point relative to the peak        
+            for (int y = 0; y < terrainData.heightmapResolution; y++)
+            {
+                for (int x = 0; x < terrainData.heightmapResolution; x++)
+                {
+                    if (!(x == randomPointX && y == randomPointY))
+                    {
+                        float distanceToPeak = Vector2.Distance(peakLocation, new Vector2(x, y)) / maxDistance;
+                        // to create a curved slope the distance to peak is squared
+                        // to control the gradient of slope we multiply by a fall off value
+
+                        float h = randomHeight - distanceToPeak * fallOffValue - Mathf.Pow(distanceToPeak, dropOffValue);
+
+                        if (voronoiHeightMap[x,y] <h)
+                        {
+                            voronoiHeightMap[x, y] = h;
+                        }
+
+                    }
+                }
+            }
+        }
         terrainData.SetHeights(0, 0, voronoiHeightMap);
     }
 

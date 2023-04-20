@@ -21,6 +21,13 @@ public class CustomTerrainEditor : Editor
     SerializedProperty perlinPersistance;
     SerializedProperty perlinHeightScale;
     SerializedProperty resetTerrain;
+    SerializedProperty peakCount;
+    SerializedProperty fallOffValue;
+    SerializedProperty dropOffValue;
+    SerializedProperty minHeight;
+    SerializedProperty maxHeight;
+
+
 
     GUITableState perlinParameterTable;
     SerializedProperty perlinParameters;
@@ -48,6 +55,15 @@ public class CustomTerrainEditor : Editor
         resetTerrain = serializedObject.FindProperty("resetTerrain");
         perlinParameterTable = new GUITableState("perlinParameterTable");
         perlinParameters = serializedObject.FindProperty("perlinParameters");
+
+        //missing multiple perlin noise TBC!!
+
+        peakCount = serializedObject.FindProperty("peakCount");
+        fallOffValue = serializedObject.FindProperty("fallOffValue");
+        dropOffValue = serializedObject.FindProperty("dropOffValue");
+        minHeight = serializedObject.FindProperty("minHeight");
+        maxHeight = serializedObject.FindProperty("maxHeight");
+
     }
 
     public override void OnInspectorGUI()
@@ -88,6 +104,12 @@ public class CustomTerrainEditor : Editor
             // Random terrain button
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUILayout.Label("Voronoi", EditorStyles.boldLabel);
+            EditorGUILayout.IntSlider(peakCount, 1, 10, new GUIContent("Peak Count"));
+            EditorGUILayout.Slider(fallOffValue, 0, 4, new GUIContent("Fall Off Value"));
+            EditorGUILayout.Slider(dropOffValue, 0, 4, new GUIContent("dropOffValue"));
+            EditorGUILayout.Slider(minHeight, 0, 1, new GUIContent("Min Height"));
+            EditorGUILayout.Slider(maxHeight, 0, 1, new GUIContent("Max Height"));
+
             if (GUILayout.Button("Voronoi"))
             {
                 terrain.VoronoiTessalation();
