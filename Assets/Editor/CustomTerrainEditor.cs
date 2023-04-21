@@ -27,7 +27,11 @@ public class CustomTerrainEditor : Editor
     SerializedProperty minHeight;
     SerializedProperty maxHeight;
     SerializedProperty voronoiType;
-
+    SerializedProperty MPDHeightMin;
+    SerializedProperty MPDHeightMax;
+    SerializedProperty MPDHeightDampnerPower;
+    SerializedProperty MPDRoughness;
+    SerializedProperty smoothCount;
 
 
     GUITableState perlinParameterTable;
@@ -39,6 +43,8 @@ public class CustomTerrainEditor : Editor
     private bool showPerlinNoise = false;
     private bool showMultiplePerlinNoise = false;
     private bool showVoronoi = false;
+    private bool showMidPointDisplacement = false;
+    private bool showSmooth = false;
 
     void OnEnable()
     {
@@ -65,6 +71,13 @@ public class CustomTerrainEditor : Editor
         minHeight = serializedObject.FindProperty("minHeight");
         maxHeight = serializedObject.FindProperty("maxHeight");
         voronoiType = serializedObject.FindProperty("voronoiType");
+
+        MPDHeightMin = serializedObject.FindProperty("MPDHeightMin");
+        MPDHeightMax = serializedObject.FindProperty("MPDHeightMax");
+        MPDHeightDampnerPower = serializedObject.FindProperty("MPDHeightDampnerPower");
+        MPDRoughness = serializedObject.FindProperty("MPDRoughness");
+
+        smoothCount = serializedObject.FindProperty("smoothCount");
 
     }
 
@@ -93,8 +106,37 @@ public class CustomTerrainEditor : Editor
             {
                 terrain.RandomTerrain();
             }
-        }   
+        }
 
+        showSmooth = EditorGUILayout.Foldout(showSmooth, "Smooth");
+
+        if(showSmooth)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            EditorGUILayout.Slider(smoothCount, 0, 30, new GUIContent("Smoothness intensity"));
+
+            if (GUILayout.Button("Smooth"))
+            {
+                terrain.Smooth();
+            }
+        }
+
+        showMidPointDisplacement = EditorGUILayout.Foldout(showMidPointDisplacement, "Midpoint Displacement");
+
+        if(showMidPointDisplacement)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("MDP", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(MPDHeightMin);
+            EditorGUILayout.PropertyField(MPDHeightMax);
+            EditorGUILayout.PropertyField(MPDHeightDampnerPower);
+            EditorGUILayout.PropertyField(MPDRoughness);
+
+            if (GUILayout.Button("Midpoint Displacement"))
+            {
+                terrain.MidPointDisplacement();
+            }
+        }
 
         // this is the logic purely behind the arrow
         showVoronoi = EditorGUILayout.Foldout(showVoronoi, "Voronoi");
