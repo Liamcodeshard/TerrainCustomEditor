@@ -581,8 +581,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f13cdbae8cc414cb5114cde636e22f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resetTerrain: 1
-  randomHeightRange: {x: 0, y: 0.001}
+  resetTerrain: 0
+  randomHeightRange: {x: 0, y: 1.46}
   heightMapImage: {fileID: 2800000, guid: 94df0929002705042b0583db5186fc8c, type: 3}
   heightMapScale: {x: 1, y: 0.25, z: 1}
   perlinXScale: 0.001
@@ -594,8 +594,8 @@ MonoBehaviour:
   perlinHeightScale: 0.116
   perlinParameters: []
   peakCount: 43
-  fallOffValue: 6.72
-  dropOffValue: 8.36
+  fallOffValue: 1.27
+  dropOffValue: 0.2
   minHeight: 0.157
   maxHeight: 0.666
   voronoiType: 2
@@ -603,6 +603,7 @@ MonoBehaviour:
   MPDHeightMax: 3
   MPDHeightDampnerPower: 2
   MPDRoughness: 2
+  smoothCount: 23.9
   terrain: {fileID: 2044513296}
   terrainData: {fileID: 15600000, guid: 7c47248ec7c33394d8b9cc1eb970dc6b, type: 2}
 --- !u!1 &2085507703

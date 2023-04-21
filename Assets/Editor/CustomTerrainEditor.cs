@@ -31,6 +31,7 @@ public class CustomTerrainEditor : Editor
     SerializedProperty MPDHeightMax;
     SerializedProperty MPDHeightDampnerPower;
     SerializedProperty MPDRoughness;
+    SerializedProperty smoothCount;
 
 
     GUITableState perlinParameterTable;
@@ -43,6 +44,7 @@ public class CustomTerrainEditor : Editor
     private bool showMultiplePerlinNoise = false;
     private bool showVoronoi = false;
     private bool showMidPointDisplacement = false;
+    private bool showSmooth = false;
 
     void OnEnable()
     {
@@ -75,6 +77,8 @@ public class CustomTerrainEditor : Editor
         MPDHeightDampnerPower = serializedObject.FindProperty("MPDHeightDampnerPower");
         MPDRoughness = serializedObject.FindProperty("MPDRoughness");
 
+        smoothCount = serializedObject.FindProperty("smoothCount");
+
     }
 
     public override void OnInspectorGUI()
@@ -104,6 +108,18 @@ public class CustomTerrainEditor : Editor
             }
         }
 
+        showSmooth = EditorGUILayout.Foldout(showSmooth, "Smooth");
+
+        if(showSmooth)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            EditorGUILayout.Slider(smoothCount, 0, 30, new GUIContent("Smoothness intensity"));
+
+            if (GUILayout.Button("Smooth"))
+            {
+                terrain.Smooth();
+            }
+        }
 
         showMidPointDisplacement = EditorGUILayout.Foldout(showMidPointDisplacement, "Midpoint Displacement");
 
