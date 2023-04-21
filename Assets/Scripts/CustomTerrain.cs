@@ -91,6 +91,11 @@ public class CustomTerrain : MonoBehaviour
         }
     }
 
+    public void MidPointDisplacement()
+    {
+
+    }
+
 
     public void VoronoiTessalation()
     {
