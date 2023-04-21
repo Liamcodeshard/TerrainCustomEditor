@@ -67,6 +67,12 @@ public class CustomTerrain : MonoBehaviour
     public enum VoronoiType {Linear = 0, Power = 1,  SinPow = 2, Combined = 3 };
     public VoronoiType voronoiType = VoronoiType.Linear;
 
+    // Midpoint Displacement
+
+    public float MPDHeightMin = -2;
+    public float MPDHeightMax = 2;
+    public float MPDHeightDampnerPower =2f;
+    public float MPDRoughness = 2f;
 
 
     // data containers for this terrain ---------------
@@ -93,7 +99,99 @@ public class CustomTerrain : MonoBehaviour
 
     public void MidPointDisplacement()
     {
+        float[,] midpointPlacementHeightMap = GetHeightMap();
+        int width = terrainData.heightmapResolution- 1;
+        int squareSize = width;
+        float heightMin = MPDHeightMin; // (float)squareSize / 2f * 0.01f;
+        float heightMax = MPDHeightMax;
 
+        float heightDampener = (float)MathF.Pow(MPDHeightDampnerPower, -1 * MPDRoughness);
+
+        int cornerX, cornerY;
+        int midX, midY;
+        int pmidXL, pmidXR, pmidYU, pmidYD;
+
+//        midpointPlacementHeightMap[0, 0] = UnityEngine.Random.Range(0f, 0.2f);
+//        midpointPlacementHeightMap[0, width-1] = UnityEngine.Random.Range(0f, 0.2f);
+//        midpointPlacementHeightMap[width-1, 0] = UnityEngine.Random.Range(0f, 0.2f);
+//        midpointPlacementHeightMap[width-1, width-1] = UnityEngine.Random.Range(0f, 0.2f);
+
+        while (squareSize > 0)
+        {
+            for (int x = 0; x < width; x += squareSize)
+            {
+                for (int y = 0; y < width; y += squareSize)
+                {
+                    cornerX = (x + squareSize);
+                    cornerY = (y + squareSize);
+
+                    midX = (int)(x + squareSize / 2);
+                    midY = (int)(y + squareSize / 2);
+
+                    midpointPlacementHeightMap[midX, midY] = (float)((midpointPlacementHeightMap[x, y] +
+                                                            midpointPlacementHeightMap[cornerX, y] +
+                                                            midpointPlacementHeightMap[x, cornerY] +
+                                                            midpointPlacementHeightMap[cornerX, cornerY]) / 4f 
+                                                            + UnityEngine.Random.Range(heightMin, heightMax));
+                }
+            }
+            for (int x = 0; x < width; x += squareSize)
+            {
+                for (int y = 0; y < width; y += squareSize)
+                {
+                    cornerX = (x + squareSize);
+                    cornerY = (y + squareSize);
+
+                    midX = (int)(x + squareSize / 2);
+                    midY = (int)(y + squareSize / 2);
+                
+                    pmidXR = (int)(midX + squareSize);
+                    pmidYU = (int)(midY + squareSize);
+                    pmidXL = (int)(midX - squareSize);
+                    pmidYD = (int)(midY - squareSize);
+
+                    if (pmidXL<= 0 || pmidYD <= 0 || pmidXR >= width -1 || pmidYU >= width -1) continue;
+
+                    //bottom middle point
+                    midpointPlacementHeightMap[midX,y] = (float)((midpointPlacementHeightMap[midX, midY] +
+                                                            midpointPlacementHeightMap[x, y] +
+                                                            midpointPlacementHeightMap[midX, pmidYD] +
+                                                            midpointPlacementHeightMap[cornerX, y]) / 4f
+                                                            + UnityEngine.Random.Range(heightMin, heightMax));
+
+
+                    //middle left point
+                    midpointPlacementHeightMap[x,midY] = (float)((midpointPlacementHeightMap[midX, midY] +
+                                                            midpointPlacementHeightMap[x, y] +
+                                                            midpointPlacementHeightMap[pmidXL, midY] +
+                                                            midpointPlacementHeightMap[x, cornerY]) / 4f
+                                                            + UnityEngine.Random.Range(heightMin, heightMax));
+
+                    //middle right point
+                    midpointPlacementHeightMap[cornerX,midY] = (float)((midpointPlacementHeightMap[midX, midY] +
+                                                            midpointPlacementHeightMap[cornerX, y] +
+                                                            midpointPlacementHeightMap[pmidXR, midY] +
+                                                            midpointPlacementHeightMap[cornerX, cornerY]) / 4f
+                                                            + UnityEngine.Random.Range(heightMin, heightMax));
+
+
+                    // top middle point
+                    midpointPlacementHeightMap[midX,cornerY] = (float)((midpointPlacementHeightMap[midX, midY] +
+                                                            midpointPlacementHeightMap[x,cornerY] +
+                                                            midpointPlacementHeightMap[midX, pmidYU] +
+                                                            midpointPlacementHeightMap[cornerX, cornerY]) / 4f
+                                                            + UnityEngine.Random.Range(heightMin, heightMax));
+
+
+                }
+            
+            }
+            squareSize = (int) (squareSize/2f);
+            heightMin *= heightDampener;
+            heightMax *= heightDampener;
+        }
+
+        terrainData.SetHeights(0, 0, midpointPlacementHeightMap);
     }
 
 

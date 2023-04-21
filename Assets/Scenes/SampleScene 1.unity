@@ -599,6 +599,10 @@ MonoBehaviour:
   minHeight: 0.157
   maxHeight: 0.666
   voronoiType: 2
+  MPDHeightMin: -3
+  MPDHeightMax: 3
+  MPDHeightDampnerPower: 2
+  MPDRoughness: 2
   terrain: {fileID: 2044513296}
   terrainData: {fileID: 15600000, guid: 7c47248ec7c33394d8b9cc1eb970dc6b, type: 2}
 --- !u!1 &2085507703

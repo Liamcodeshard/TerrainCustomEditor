@@ -27,7 +27,10 @@ public class CustomTerrainEditor : Editor
     SerializedProperty minHeight;
     SerializedProperty maxHeight;
     SerializedProperty voronoiType;
-
+    SerializedProperty MPDHeightMin;
+    SerializedProperty MPDHeightMax;
+    SerializedProperty MPDHeightDampnerPower;
+    SerializedProperty MPDRoughness;
 
 
     GUITableState perlinParameterTable;
@@ -67,6 +70,11 @@ public class CustomTerrainEditor : Editor
         maxHeight = serializedObject.FindProperty("maxHeight");
         voronoiType = serializedObject.FindProperty("voronoiType");
 
+        MPDHeightMin = serializedObject.FindProperty("MPDHeightMin");
+        MPDHeightMax = serializedObject.FindProperty("MPDHeightMax");
+        MPDHeightDampnerPower = serializedObject.FindProperty("MPDHeightDampnerPower");
+        MPDRoughness = serializedObject.FindProperty("MPDRoughness");
+
     }
 
     public override void OnInspectorGUI()
@@ -101,7 +109,14 @@ public class CustomTerrainEditor : Editor
 
         if(showMidPointDisplacement)
         {
-            if(GUILayout.Button("Midpoint Displacement"))
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("MDP", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(MPDHeightMin);
+            EditorGUILayout.PropertyField(MPDHeightMax);
+            EditorGUILayout.PropertyField(MPDHeightDampnerPower);
+            EditorGUILayout.PropertyField(MPDRoughness);
+
+            if (GUILayout.Button("Midpoint Displacement"))
             {
                 terrain.MidPointDisplacement();
             }
