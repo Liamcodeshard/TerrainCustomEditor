@@ -14,8 +14,8 @@ public class CustomTerrain : MonoBehaviour
     public bool resetTerrain;
 
     // empty vector for the random height map
-    public Vector2 randomHeightRange = new Vector2(0,0.1f);
-    
+    public Vector2 randomHeightRange = new Vector2(0, 0.1f);
+
     // here we will be taking a 2D image and turning it into a height map - we need to be able to scale the pic
     public Texture2D heightMapImage;
     public Vector3 heightMapScale = new Vector3(1, 1, 1);
@@ -63,6 +63,9 @@ public class CustomTerrain : MonoBehaviour
     public float dropOffValue = 0.6f;
     public float minHeight = 0;
     public float maxHeight = 1;
+
+    public enum VoronoiType {Linear = 0, Power = 1,  SinPow = 2, Combined = 3 };
+    public VoronoiType voronoiType = VoronoiType.Linear;
 
 
 
@@ -127,6 +130,25 @@ public class CustomTerrain : MonoBehaviour
                         // to control the gradient of slope we multiply by a fall off value
 
                         float h = randomHeight - distanceToPeak * fallOffValue - Mathf.Pow(distanceToPeak, dropOffValue);
+
+                        if(voronoiType == VoronoiType.Combined)
+                        {
+                            h = randomHeight - distanceToPeak* fallOffValue - 
+                                 MathF.Pow(distanceToPeak, dropOffValue);
+                        }  
+                        else if(voronoiType == VoronoiType.Power)
+                        {
+                            h = randomHeight-MathF.Pow(distanceToPeak, dropOffValue) * fallOffValue;
+                        }
+                        else if(voronoiType == VoronoiType.SinPow)
+                        {
+                            h = randomHeight - MathF.Pow(distanceToPeak*3, fallOffValue) - MathF.Sin(distanceToPeak*2*MathF.PI)/dropOffValue;
+                        }
+                        else
+                        {
+                            h = randomHeight-distanceToPeak * fallOffValue;
+                        }
+
 
                         if (voronoiHeightMap[x,y] <h)
                         {

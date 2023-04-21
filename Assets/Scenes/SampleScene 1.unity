@@ -593,11 +593,12 @@ MonoBehaviour:
   perlinPersistance: 4.78
   perlinHeightScale: 0.116
   perlinParameters: []
-  peakCount: 7
-  fallOffValue: 0.29
-  dropOffValue: 0.66
-  minHeight: 0.027
-  maxHeight: 0.127
+  peakCount: 43
+  fallOffValue: 6.72
+  dropOffValue: 8.36
+  minHeight: 0.157
+  maxHeight: 0.666
+  voronoiType: 2
   terrain: {fileID: 2044513296}
   terrainData: {fileID: 15600000, guid: 7c47248ec7c33394d8b9cc1eb970dc6b, type: 2}
 --- !u!1 &2085507703

@@ -26,6 +26,7 @@ public class CustomTerrainEditor : Editor
     SerializedProperty dropOffValue;
     SerializedProperty minHeight;
     SerializedProperty maxHeight;
+    SerializedProperty voronoiType;
 
 
 
@@ -63,6 +64,7 @@ public class CustomTerrainEditor : Editor
         dropOffValue = serializedObject.FindProperty("dropOffValue");
         minHeight = serializedObject.FindProperty("minHeight");
         maxHeight = serializedObject.FindProperty("maxHeight");
+        voronoiType = serializedObject.FindProperty("voronoiType");
 
     }
 
@@ -104,11 +106,12 @@ public class CustomTerrainEditor : Editor
             // Random terrain button
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUILayout.Label("Voronoi", EditorStyles.boldLabel);
-            EditorGUILayout.IntSlider(peakCount, 1, 10, new GUIContent("Peak Count"));
-            EditorGUILayout.Slider(fallOffValue, 0, 4, new GUIContent("Fall Off Value"));
-            EditorGUILayout.Slider(dropOffValue, 0, 4, new GUIContent("dropOffValue"));
+            EditorGUILayout.IntSlider(peakCount, 1, 100, new GUIContent("Peak Count"));
+            EditorGUILayout.Slider(fallOffValue, 0, 10, new GUIContent("Fall Off Value"));
+            EditorGUILayout.Slider(dropOffValue, 0, 10, new GUIContent("dropOffValue"));
             EditorGUILayout.Slider(minHeight, 0, 1, new GUIContent("Min Height"));
             EditorGUILayout.Slider(maxHeight, 0, 1, new GUIContent("Max Height"));
+            EditorGUILayout.PropertyField(voronoiType);
 
             if (GUILayout.Button("Voronoi"))
             {
