@@ -32,10 +32,14 @@ public class CustomTerrainEditor : Editor
     SerializedProperty MPDHeightDampnerPower;
     SerializedProperty MPDRoughness;
     SerializedProperty smoothCount;
+    SerializedProperty splatHeights;
 
 
     GUITableState perlinParameterTable;
     SerializedProperty perlinParameters;
+
+    GUITableState splatMapTable;
+    SerializedProperty splatMapHeights;
 
     // allows this secttion ot be dropped down
     bool showRandom = false;
@@ -45,6 +49,7 @@ public class CustomTerrainEditor : Editor
     private bool showVoronoi = false;
     private bool showMidPointDisplacement = false;
     private bool showSmooth = false;
+    private bool showSplatMaps = false;
 
     void OnEnable()
     {
@@ -60,11 +65,12 @@ public class CustomTerrainEditor : Editor
         perlinPersistance = serializedObject.FindProperty("perlinPersistance");
         perlinHeightScale = serializedObject.FindProperty("perlinHeightScale");
         resetTerrain = serializedObject.FindProperty("resetTerrain");
+       
+        //missing multiple perlin noise TBC!!
         perlinParameterTable = new GUITableState("perlinParameterTable");
         perlinParameters = serializedObject.FindProperty("perlinParameters");
 
-        //missing multiple perlin noise TBC!!
-
+        // for vonoroi
         peakCount = serializedObject.FindProperty("peakCount");
         fallOffValue = serializedObject.FindProperty("fallOffValue");
         dropOffValue = serializedObject.FindProperty("dropOffValue");
@@ -72,6 +78,7 @@ public class CustomTerrainEditor : Editor
         maxHeight = serializedObject.FindProperty("maxHeight");
         voronoiType = serializedObject.FindProperty("voronoiType");
 
+        //for midpont displacmeent
         MPDHeightMin = serializedObject.FindProperty("MPDHeightMin");
         MPDHeightMax = serializedObject.FindProperty("MPDHeightMax");
         MPDHeightDampnerPower = serializedObject.FindProperty("MPDHeightDampnerPower");
@@ -79,6 +86,8 @@ public class CustomTerrainEditor : Editor
 
         smoothCount = serializedObject.FindProperty("smoothCount");
 
+        splatMapTable = new GUITableState("splatMapTable");
+        splatHeights = serializedObject.FindProperty("splatHeights"); 
     }
 
     public override void OnInspectorGUI()
@@ -108,18 +117,36 @@ public class CustomTerrainEditor : Editor
             }
         }
 
-        showSmooth = EditorGUILayout.Foldout(showSmooth, "Smooth");
+        showSplatMaps = EditorGUILayout.Foldout(showSplatMaps, "Splat Maps");
 
-        if(showSmooth)
+        if(showSplatMaps)
         {
+            // label the field
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            EditorGUILayout.Slider(smoothCount, 0, 30, new GUIContent("Smoothness intensity"));
+            GUILayout.Label("Splat Maps", EditorStyles.boldLabel);
 
-            if (GUILayout.Button("Smooth"))
+            // draw the table
+            splatMapTable = GUITableLayout.DrawTable(splatMapTable, splatHeights);
+
+            EditorGUILayout.BeginHorizontal();
+
+            if(GUILayout.Button("+"))
             {
-                terrain.Smooth();
+                terrain.AddNewSPlatHeight();
+            }  
+            if(GUILayout.Button("-"))
+            {
+                terrain.RemoveSplatHeight();
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            if (GUILayout.Button("Apply Splat Maps"))
+            {
+                terrain.SplatMaps();
             }
         }
+
 
         showMidPointDisplacement = EditorGUILayout.Foldout(showMidPointDisplacement, "Midpoint Displacement");
 
@@ -240,6 +267,18 @@ public class CustomTerrainEditor : Editor
         }
 
 
+        showSmooth = EditorGUILayout.Foldout(showSmooth, "Smooth");
+
+        if(showSmooth)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            EditorGUILayout.Slider(smoothCount, 0, 30, new GUIContent("Smoothness intensity"));
+
+            if (GUILayout.Button("Smooth"))
+            {
+                terrain.Smooth();
+            }
+        }
         serializedObject.ApplyModifiedProperties();
     }
 

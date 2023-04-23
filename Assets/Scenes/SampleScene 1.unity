@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f13cdbae8cc414cb5114cde636e22f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resetTerrain: 0
+  resetTerrain: 1
   randomHeightRange: {x: 0, y: 1.46}
   heightMapImage: {fileID: 2800000, guid: 94df0929002705042b0583db5186fc8c, type: 3}
   heightMapScale: {x: 1, y: 0.25, z: 1}
@@ -604,6 +604,11 @@ MonoBehaviour:
   MPDHeightDampnerPower: 2
   MPDRoughness: 2
   smoothCount: 23.9
+  splatHeights:
+  - texture: {fileID: 2800000, guid: 858e483d613d848cb935156b41553e4d, type: 3}
+    minHeight: 0.1
+    maxHeight: 0.2
+    remove: 1
   terrain: {fileID: 2044513296}
   terrainData: {fileID: 15600000, guid: 7c47248ec7c33394d8b9cc1eb970dc6b, type: 2}
 --- !u!1 &2085507703
@@ -693,7 +698,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2085507703}
   m_LocalRotation: {x: 0.788769, y: -0.039245456, z: -0.16816111, w: 0.5899366}
-  m_LocalPosition: {x: 333.1, y: 528.6, z: 206.5}
+  m_LocalPosition: {x: 330.2, y: 528.6, z: 205.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

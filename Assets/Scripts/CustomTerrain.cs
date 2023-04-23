@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity;
 using UnityEditor;
-
+using System.Net.Security;
 
 [ExecuteInEditMode]
 
@@ -78,6 +78,26 @@ public class CustomTerrain : MonoBehaviour
 
     public float smoothCount =1;
 
+
+    // making Splat maps
+
+
+    // first we create a class/objbect blueprint
+    [System.Serializable]
+    public class SplatHeights
+    {
+        public Texture2D texture = null;
+        public float minHeight = .1f; // here is to control the height of the textures
+        public float maxHeight = .2f;
+        public bool remove = false;
+    }
+
+    // then we make a splatheight class list object that we can fill with splat hieght objects
+    public List<SplatHeights> splatHeights = new List<SplatHeights>()
+    { 
+        new SplatHeights()
+    };
+
     // data containers for this terrain ---------------
     public Terrain terrain;
     public TerrainData terrainData;
@@ -98,6 +118,47 @@ public class CustomTerrain : MonoBehaviour
             //gives a fresh float value
             return new float[terrainData.heightmapResolution, terrainData.heightmapResolution];
         }
+    }
+
+    public void AddNewSPlatHeight()
+    {
+        splatHeights.Add(new SplatHeights());
+    }
+
+    public void RemoveSplatHeight()
+    {
+        List<SplatHeights> keptSplatHeights = new List<SplatHeights>();
+
+        for (int i = 0; i < splatHeights.Count; i++)
+        {
+            if (!splatHeights[i].remove)
+            {
+                keptSplatHeights.Add(splatHeights[i]);
+            }
+        }    
+        if(keptSplatHeights.Count <= 0)
+        {
+            keptSplatHeights.Add(splatHeights[0]);
+        }
+        splatHeights = keptSplatHeights;
+    }
+
+    public void SplatMaps()
+    {
+        TerrainLayer[] newSplatPrototypes;
+        newSplatPrototypes = new TerrainLayer[splatHeights.Count];
+
+        int spindex = 0;
+
+        foreach (SplatHeights sh in splatHeights)
+        {
+            newSplatPrototypes[spindex] = new TerrainLayer();
+            newSplatPrototypes[spindex].diffuseTexture = sh.texture;
+            newSplatPrototypes[spindex].diffuseTexture.Apply(true);
+            spindex++;
+
+        }
+        terrainData.terrainLayers = newSplatPrototypes;
     }
 
     List<Vector2> GenerateNeighbours(Vector2 pos, int width, int height)
