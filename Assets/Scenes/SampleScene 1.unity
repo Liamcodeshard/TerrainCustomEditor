@@ -583,7 +583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resetTerrain: 1
   randomHeightRange: {x: 0, y: 1.46}
-  heightMapImage: {fileID: 2800000, guid: 94df0929002705042b0583db5186fc8c, type: 3}
+  heightMapImage: {fileID: 2800000, guid: ffadc5cfc8bb9fa4988bfb7dc3f5eab6, type: 3}
   heightMapScale: {x: 1, y: 0.25, z: 1}
   perlinXScale: 0.001
   perlinYScale: 0.001
@@ -596,19 +596,33 @@ MonoBehaviour:
   peakCount: 43
   fallOffValue: 1.27
   dropOffValue: 0.2
-  minHeight: 0.157
-  maxHeight: 0.666
-  voronoiType: 2
-  MPDHeightMin: -3
-  MPDHeightMax: 3
+  minHeight: 0.016
+  maxHeight: 0.332
+  voronoiType: 0
+  MPDHeightMin: -2.14
+  MPDHeightMax: 2.41
   MPDHeightDampnerPower: 2
   MPDRoughness: 2
-  smoothCount: 23.9
+  smoothCount: 1.16
   splatHeights:
-  - texture: {fileID: 2800000, guid: 858e483d613d848cb935156b41553e4d, type: 3}
+  - texture: {fileID: 2800000, guid: cbc6c8225a70e4475b3b2f20c8a7ec98, type: 3}
+    minHeight: 0
+    maxHeight: 0.1
+    tileOffset: {x: 0, y: 0}
+    tileSize: {x: 50, y: 50}
+    remove: 1
+  - texture: {fileID: 2800000, guid: 1368cbe84e5ef458787070c6ea7ae2ee, type: 3}
+    minHeight: 0.2
+    maxHeight: 0.3
+    tileOffset: {x: 0, y: 0}
+    tileSize: {x: 50, y: 50}
+    remove: 0
+  - texture: {fileID: 2800000, guid: a4fedcb40a80e4e57b3b3d708aff9873, type: 3}
     minHeight: 0.1
     maxHeight: 0.2
-    remove: 1
+    tileOffset: {x: 0, y: 0}
+    tileSize: {x: 50, y: 50}
+    remove: 0
   terrain: {fileID: 2044513296}
   terrainData: {fileID: 15600000, guid: 7c47248ec7c33394d8b9cc1eb970dc6b, type: 2}
 --- !u!1 &2085507703

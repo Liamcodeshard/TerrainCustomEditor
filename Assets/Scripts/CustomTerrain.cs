@@ -5,6 +5,8 @@ using UnityEngine;
 using Unity;
 using UnityEditor;
 using System.Net.Security;
+using UnityEngine.SceneManagement;
+using System.IO;
 
 [ExecuteInEditMode]
 
@@ -89,10 +91,12 @@ public class CustomTerrain : MonoBehaviour
         public Texture2D texture = null;
         public float minHeight = .1f; // here is to control the height of the textures
         public float maxHeight = .2f;
+        public Vector2 tileOffset = new Vector2(0, 0);
+        public Vector2 tileSize = new Vector2(50,50);
         public bool remove = false;
     }
 
-    // then we make a splatheight class list object that we can fill with splat hieght objects
+    // then we make a splatHeight class list object that we can fill with splat hieght objects
     public List<SplatHeights> splatHeights = new List<SplatHeights>()
     { 
         new SplatHeights()
@@ -150,16 +154,92 @@ public class CustomTerrain : MonoBehaviour
 
         int spindex = 0;
 
-        foreach (SplatHeights sh in splatHeights)
-        {
-            newSplatPrototypes[spindex] = new TerrainLayer();
-            newSplatPrototypes[spindex].diffuseTexture = sh.texture;
-            newSplatPrototypes[spindex].diffuseTexture.Apply(true);
-            spindex++;
+        // newer versions of unity will delete textures/splatmapps when it is saved so we need to save to an empty folder
+        String terrainLayersFolderName = "Terrain Layers (Generated)";
 
+        String generatedTerrainLayersFolderPath = "Assets/" + terrainLayersFolderName;
+        if (!AssetDatabase.IsValidFolder(generatedTerrainLayersFolderPath))
+        {
+            AssetDatabase.CreateFolder("Assets", terrainLayersFolderName);
+        }
+        else
+        {
+            // delete any existing textures so if we change the texture there isn't any left over textures in the folder.
+            string[] generatedAssetPaths = Directory.GetFiles(generatedTerrainLayersFolderPath);
+          //  print("assets: " + generatedAssetPaths.Length);
+            foreach (String generatedAssetPath in generatedAssetPaths)
+            {
+                AssetDatabase.DeleteAsset(generatedAssetPath);
+            }
+        }
+
+
+        foreach (SplatHeights splatHeight in this.splatHeights)
+        {
+            TerrainLayer terrainLayer = new TerrainLayer();
+            terrainLayer.diffuseTexture = splatHeight.texture;
+            terrainLayer.tileOffset = splatHeight.tileOffset;
+            terrainLayer.tileSize = splatHeight.tileSize;
+            terrainLayer.diffuseTexture.Apply(true);
+            newSplatPrototypes[spindex] = terrainLayer;
+            string path = generatedTerrainLayersFolderPath + "/Scene_" + SceneManager.GetActiveScene().name + "_"
+                                                        + this.gameObject.name + "_" + splatHeight.texture.name + "_"
+                                                        + spindex + ".terrainlayer";
+
+            AssetDatabase.CreateAsset(newSplatPrototypes[spindex], path);
+            spindex++;
         }
         terrainData.terrainLayers = newSplatPrototypes;
+
+        // get heights uses the current heightmaps heights
+        float[,] splatHeightMap = terrainData.GetHeights(0, 0, terrainData.heightmapResolution, terrainData.heightmapResolution);
+        float[,,] splatMapData = new float[terrainData.alphamapWidth, terrainData.alphamapHeight, terrainData.alphamapLayers];
+
+        for (int y = 0; y < terrainData.alphamapHeight; y++)
+        {
+            for (int x = 0; x<terrainData.alphamapWidth; x++)
+            {
+                float[] splat = new float[terrainData.alphamapLayers];
+                for(int i = 0;i < splatHeights.Count; i++)
+                {
+                    //responsible for blending between texture layers
+                    float noise = Mathf.PerlinNoise(x * 0.01f, y * 0.01f) * 0.1f;
+                    float blendOffset = 0.01f + noise;
+                    float thisHeightStart = splatHeights[i].minHeight - blendOffset;
+                    float thisHeightStop = splatHeights[i].maxHeight - blendOffset;
+
+                    if ((splatHeightMap[x,y] >= thisHeightStart && splatHeightMap[x,y] <= thisHeightStop))
+                    {
+                        splat[i] = 1;
+                    }
+                }
+
+                NormalizeVector(splat);
+
+                for(int i = 0; i < splatHeights.Count; i++)
+                {
+                    splatMapData[x, y, i] = splat[i];
+                }
+            }
+        }
+        terrainData.SetAlphamaps(0, 0, splatMapData);
+
     }
+
+    void NormalizeVector(float[] v)
+    {
+        float total = 0;
+        for(int i = 0; i<v.Length; i++)
+        {
+            total += v[i];
+        }       
+        for(int i = 0; i<v.Length; i++)
+        {
+            v[i] /= total;
+        }
+
+    }
+
 
     List<Vector2> GenerateNeighbours(Vector2 pos, int width, int height)
     {
