@@ -223,7 +223,7 @@ public class CustomTerrainEditor : Editor
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUILayout.Label("Multiple Perlin Noise Waves", EditorStyles.boldLabel);
 
-            perlinParameterTable = GUITableLayout.DrawTable(perlinParameterTable, perlinParameters);
+            perlinParameterTable = GUITableLayout.DrawTable(perlinParameterTable, serializedObject.FindProperty("perlinParameters"));
 
             GUILayout.Space(20);
             EditorGUILayout.BeginHorizontal();
